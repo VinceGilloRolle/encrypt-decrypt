@@ -1,0 +1,134 @@
+<ion-content [fullscreen]="true" class="page-content">
+  <div class="atmosphere" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <header class="brand">
+      <p class="brand-mark">Midterm · Cipher Lab</p>
+      <h1 class="brand-title">Encrypt &amp; Decrypt</h1>
+      <p class="brand-sub">Lock a message. Unlock it later.</p>
+    </header>
+
+    <section class="panel mode-panel">
+      <div class="mode-toggle" role="tablist" aria-label="Mode">
+        <button
+          type="button"
+          class="mode-btn"
+          [class.active]="mode === 'encrypt'"
+          (click)="setMode('encrypt')"
+        >
+          Encrypt
+        </button>
+        <button
+          type="button"
+          class="mode-btn"
+          [class.active]="mode === 'decrypt'"
+          (click)="setMode('decrypt')"
+        >
+          Decrypt
+        </button>
+        <span
+          class="mode-thumb"
+          [class.decrypt]="mode === 'decrypt'"
+          aria-hidden="true"
+        ></span>
+      </div>
+
+      <div class="method-row">
+        <button
+          type="button"
+          class="method-chip"
+          [class.active]="method === 'caesar'"
+          (click)="setMethod('caesar')"
+        >
+          <span class="chip-label">Caesar</span>
+          <span class="chip-meta">Letter shift</span>
+        </button>
+        <button
+          type="button"
+          class="method-chip"
+          [class.active]="method === 'aes'"
+          (click)="setMethod('aes')"
+        >
+          <span class="chip-label">AES</span>
+          <span class="chip-meta">Password key</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="panel fields-panel">
+      <label class="field-block" *ngIf="method === 'caesar'">
+        <span class="field-label">Shift</span>
+        <input
+          class="field-input"
+          type="number"
+          [(ngModel)]="caesarShift"
+          min="0"
+          max="25"
+        />
+      </label>
+
+      <label class="field-block" *ngIf="method === 'aes'">
+        <span class="field-label">Password / Key</span>
+        <input
+          class="field-input"
+          type="password"
+          [(ngModel)]="aesPassword"
+          placeholder="Enter secret password"
+          autocomplete="off"
+        />
+      </label>
+
+      <label class="field-block">
+        <span class="field-label">{{ inputLabel }}</span>
+        <textarea
+          class="field-input field-area"
+          [(ngModel)]="inputText"
+          [placeholder]="'Type your ' + inputLabel.toLowerCase() + ' here'"
+          rows="5"
+        ></textarea>
+      </label>
+    </section>
+
+    <div class="actions">
+      <button
+        type="button"
+        class="btn-primary"
+        (click)="run()"
+        [disabled]="busy"
+      >
+        <ion-spinner *ngIf="busy" name="crescent"></ion-spinner>
+        <span *ngIf="!busy">{{ actionLabel }}</span>
+      </button>
+      <div class="row-actions">
+        <button
+          type="button"
+          class="btn-ghost"
+          (click)="swapIO()"
+          [disabled]="!outputText"
+        >
+          Use as input
+        </button>
+        <button type="button" class="btn-text" (click)="clearAll()">
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <section class="panel result-panel" *ngIf="outputText">
+      <div class="result-head">
+        <span class="field-label">{{ outputLabel }}</span>
+        <span class="result-tag">{{ method === 'aes' ? 'AES-GCM' : 'Caesar' }}</span>
+      </div>
+      <pre class="result-body">{{ outputText }}</pre>
+    </section>
+
+    <p class="hint" *ngIf="method === 'caesar'">
+      Caesar shifts each letter by the shift value. Numbers and symbols stay the same.
+    </p>
+    <p class="hint" *ngIf="method === 'aes'">
+      AES-GCM uses your password as the key. Use the same password to decrypt.
+    </p>
+  </div>
+</ion-content>

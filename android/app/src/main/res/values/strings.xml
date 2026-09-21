@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Encrypt Decrypt</string>
+    <string name="title_activity_main">Encrypt Decrypt</string>
+    <string name="package_name">io.ionic.encryptdecrypt</string>
+    <string name="custom_url_scheme">io.ionic.encryptdecrypt</string>
+</resources>
